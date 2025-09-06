@@ -1,0 +1,4 @@
+resources:
+  - identity-deployment.yaml
+  - identity-service.yaml
+  - identity-ingress.yaml

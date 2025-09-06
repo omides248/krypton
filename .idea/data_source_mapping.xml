@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/backend/identity/internal/adapters/storage/postgresql/migrations/000001_create_users_table.up.sql" value="492a72ef-d4d9-4b44-ad36-c282ac434918" />
+    <file url="file://$PROJECT_DIR$/backend/identity/internal/adapters/storage/postgresql/user_repository.go" value="492a72ef-d4d9-4b44-ad36-c282ac434918" />
+  </component>
+</project>

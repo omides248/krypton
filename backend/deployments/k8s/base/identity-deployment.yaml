@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: identity-deployment
+  labels:
+    app: identity-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: identity-deployment
+  template:
+    metadata:
+      name: identity-deployment
+      labels:
+        app: identity-deployment
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: identity-deployment
+          image: golang:1.24.5-alpine
+          workingDir: /go/src/identity
+#          command: [ "sh", "-c", "go run main.go" ]
+          tty: true
+          stdin: true
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: identity-code
+              mountPath: /go/src/identity
+            - name: pkg-code
+              mountPath: /go/src/pkg
+            - name: go-mod-cache
+              mountPath: /go/pkg/mod
+            - name: go-build-cache
+              mountPath: /root/.cache/go-build
+      volumes:
+        - name: identity-code
+          hostPath:
+            path: /home/omides248/krypton/backend/identity
+            type: Directory
+        - name: pkg-code
+          hostPath:
+            path: /home/omides248/krypton/backend/pkg
+            type: Directory
+        - name: go-mod-cache
+          hostPath:
+            path: /var/lib/krypton/cache/go-mod
+            type: DirectoryOrCreate
+        - name: go-build-cache
+          hostPath:
+            path: /var/lib/krypton/cache/go-build
+            type: DirectoryOrCreate

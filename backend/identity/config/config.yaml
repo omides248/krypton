@@ -1,0 +1,27 @@
+general:
+  app_env: "development"
+  grpc_port: ":50051"
+  http_port: ":8080"
+  grpc_addr: "127.0.0.1:50051"
+  host: "192.168.8.140:8080"
+
+database:
+  postgresql:
+    uri: "postgres://omides248:123123@192.168.8.140:5432/identity_db"
+  migration:
+    path: "file://internal/adapters/storage/postgresql/migrations"
+
+
+minio:
+  endpoint: "192.168.8.140:9000"
+  access_key: "minioadmin"
+  secret_key: "minioadmin123123"
+  public_url: "http://192.168.8.140:9000"
+
+local_storage:
+  public_storage_path: "/var/lib/blackshop/storage/public"
+  private_storage_path: "/var/lib/blackshop/storage/private"
+  static_files_prefix: "public"
+
+auth:
+  jwt_secret_key: "25731f98a3959cc09469b86ffcff0e35702fe43337dd18f80cf9eae2767876f3"

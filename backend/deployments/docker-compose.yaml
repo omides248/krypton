@@ -1,0 +1,130 @@
+services:
+
+  catalog-service:
+    image: golang:1.24.5-alpine
+    container_name: catalog-service
+    volumes:
+      - ../catalog:/go/src/catalog
+      - ../pkg:/go/src/pkg
+      - go-mod-cache:/go/pkg/mod
+      - go-build-cache:/root/.cache/go-build
+      - ${APP_STORAGE_PATH}:${APP_STORAGE_PATH}/public
+    working_dir: /go/src/catalog
+    stdin_open: true
+    tty: true
+    user: "root"
+    ports:
+      - "8080:8080"
+      - "50051:50051"
+    depends_on:
+#      - otel-collector
+      - mongo
+      - postgres
+      - redis
+    networks:
+      - blackshop-network
+
+  mongo:
+    image: mongo
+    container_name: black-shop-mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=omides248
+      - MONGO_INITDB_ROOT_PASSWORD=123123
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    deploy:
+      resources:
+        limits:
+          memory: 768M
+          cpus: "0.75"
+    networks:
+      - blackshop-network
+
+  postgres:
+    image: postgres
+    container_name: black-shop-postgres
+    environment:
+      - POSTGRES_USER=omides248
+      - POSTGRES_PASSWORD=123123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-postgresql.sh:/docker-entrypoint-initdb.d/init-db.sh
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "1.0"
+    networks:
+      - blackshop-network
+
+  redis:
+    image: redis
+    container_name: black-shop-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: "0.25"
+    networks:
+      - blackshop-network
+
+#  otel-collector:
+#    image: otel/opentelemetry-collector-contrib:0.132.0
+#    container_name: otel-collector
+#    command: ["--config=/etc/otel-collector-config.yaml"]
+#    volumes:
+#      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+#    ports:
+#      - "4317:4317" # OTLP gRPC receiver
+#      - "8889:8889" # Prometheus exporter
+#    networks:
+#      - blackshop-network
+#
+#  prometheus:
+#    image: prom/prometheus:v2.55.1
+#    container_name: prometheus
+#    command:
+#      - --config.file=/etc/prometheus.yaml
+#      - --storage.tsdb.path=/prometheus
+#    volumes:
+#      - ./prometheus.yaml:/etc/prometheus.yaml
+#      - prometheus-data:/prometheus
+#    ports:
+#      - "9090:9090"
+#    networks:
+#      - blackshop-network
+#
+#  grafana:
+#    image: grafana/grafana:11.5.8
+#    container_name: grafana
+#    ports:
+#      - "3000:3000"
+##    environment:
+##      - GF_SERVER_HTTP_ADDR=0.0.0.0
+#    volumes:
+#      - grafana-data:/var/lib/grafana
+#    networks:
+#      - blackshop-network
+
+volumes:
+  mongo-data:
+  postgres-data:
+  redis-data:
+  minio-data:
+  grafana-data:
+  prometheus-data:
+  go-mod-cache:
+  go-build-cache:
+  blackshop-data-volume:
+
+networks:
+  blackshop-network:
+    driver: bridge
