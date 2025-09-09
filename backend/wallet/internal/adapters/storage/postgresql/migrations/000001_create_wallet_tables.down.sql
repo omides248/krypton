@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS internal_transfers;
+DROP TABLE IF EXISTS withdrawals;
+DROP TABLE IF EXISTS deposits;
+DROP TABLE IF EXISTS deposit_addresses;
+DROP TABLE IF EXISTS accounts;
+DROP TABLE IF EXISTS asset_networks;
+DROP TABLE IF EXISTS networks;
+DROP TABLE IF EXISTS assets;
+DROP TYPE IF EXISTS asset_type;

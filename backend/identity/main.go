@@ -18,10 +18,36 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
 	"go.uber.org/zap"
+
+	docs "krypton/identity/docs"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
+
+// @title           Krypton Identity Service API
+// @version         1.0
+// @description     This is the API for the Krypton Identity microservice.
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   API Support
+// @contact.url    http://swagger.io/support
+// @contact.email  support@swagger.io
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host      localhost:8080
+// @BasePath  /v1
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+// @description "Type 'Bearer' followed by a space and JWT token."
 
 func main() {
 	rootCmd := cmd.NewRootCmd(runServer)
@@ -88,15 +114,37 @@ func runHTTPServer(port string, userService services.UserService, minioService *
 	gin.SetMode(gin.DebugMode)
 	engine := gin.New()
 
+	// Add CORS middleware
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowAllOrigins = true // For development, allow all origins
+	corsConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization"}
+	engine.Use(cors.New(corsConfig))
+	//corsConfig := cors.Config{
+	//	AllowOrigins:     []string{"*"},
+	//	AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+	//	AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
+	//	ExposeHeaders:    []string{"Content-Length"},
+	//	AllowCredentials: true,
+	//}
+	//engine.Use(cors.New(corsConfig))
+
 	engine.Use(gin.Recovery())
 	engine.Use(gin.Logger())
 
 	domainErrorMappings := error_mapping.GetDomainErrorMappings()
 	engine.Use(error_handler.New(domainErrorMappings, appLogger))
 
+	// Swagger setup
+	docs.SwaggerInfo.BasePath = "/v1"
+	docs.SwaggerInfo.Host = ""
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
+	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	httpserver.Setup(engine, userService, minioService, cfg, tokenManager, appLogger)
 
 	appLogger.Info("HTTP (Gin) Server is running on", zap.String("port", port))
+	appLogger.Info("Swagger UI is available at http://localhost" + port + "/swagger/index.html")
+
 	if err := engine.Run(port); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		return fmt.Errorf("gin server failed: %w", err)
 	}

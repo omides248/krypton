@@ -2,7 +2,12 @@ package contextkeys
 
 import (
 	"context"
+	"errors"
 	"fmt"
+)
+
+var (
+	ErrUserIDNotFound = errors.New("user id not found")
 )
 
 type contextKey string

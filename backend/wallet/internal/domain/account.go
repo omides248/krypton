@@ -17,7 +17,13 @@ type Account struct {
 	UpdatedAt     time.Time
 }
 
+type UserAccount struct {
+	Account
+	AssetSymbol string
+}
+
 func NewAccount(userID string, assetID AssetID) (*Account, error) {
+	// TODO check assetID
 	if userID == "" {
 		return nil, ErrUserIDRequired
 	}

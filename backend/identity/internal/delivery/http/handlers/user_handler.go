@@ -25,6 +25,21 @@ func NewUserHandler(service services.UserService, logger *zap.Logger) *UserHandl
 	}
 }
 
+// GetMyProfile godoc
+// @Summary      Get user profile
+// @Description  Retrieves the profile information of the authenticated user.
+// @Tags         Users
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  dto.UserResponse
+// @Failure      401  {object}  dto.ErrorResponse "Unauthorized"
+// @Failure      500  {object}  dto.ErrorResponse "Internal Server Error"
+// @Security     ApiKeyAuth
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+// @description Type "Bearer" followed by a space and JWT token.
+// @Router       /users/me [get]
 func (h *UserHandler) GetMyProfile(c *gin.Context) {
 	userIDVal, exists := c.Get("userID")
 	if !exists {

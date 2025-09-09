@@ -23,6 +23,18 @@ func NewAuthHandler(service services.UserService, logger *zap.Logger) *AuthHandl
 	}
 }
 
+// Register godoc
+// @Summary      Register a new user
+// @Description  Creates a new user account with the provided email and password.
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Param        request body   dto.RegisterRequest true "User registration request"
+// @Success      201  {object}  dto.UserResponse
+// @Failure      400  {object}  dto.ErrorResponse "Validation Error"
+// @Failure      409  {object}  dto.ErrorResponse "Email already exists"
+// @Failure      500  {object}  dto.ErrorResponse "Internal Server Error"
+// @Router       /auth/register [post]
 func (h *AuthHandler) Register(c *gin.Context) {
 	var req dto.RegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -49,6 +61,18 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	return
 }
 
+// Login godoc
+// @Summary      Log in a user
+// @Description  Authenticates a user and returns access and refresh tokens.
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Param        request body   dto.LoginRequest true "User login request"
+// @Success      200  {object}  dto.LoginResponse
+// @Failure      400  {object}  dto.ErrorResponse "Validation Error"
+// @Failure      401  {object}  dto.ErrorResponse "Invalid Credentials"
+// @Failure      500  {object}  dto.ErrorResponse "Internal Server Error"
+// @Router       /auth/login [post]
 func (h *AuthHandler) Login(c *gin.Context) {
 	var req dto.LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -85,8 +109,21 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	return
 }
 
+// Refresh godoc
+// @Summary      Refresh access token
+// @Description  Generates a new access token using a valid refresh token.
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Param        request body   dto.RefreshRequest true "Refresh token request"
+// @Success      200  {object}  dto.RefreshResponse
+// @Failure      400  {object}  dto.ErrorResponse "Validation Error"
+// @Failure      401  {object}  dto.ErrorResponse "Invalid Token"
+// @Failure      500  {object}  dto.ErrorResponse "Internal Server Error"
+// @Router       /auth/refresh [post]
 func (h *AuthHandler) Refresh(c *gin.Context) {
 	var req dto.RefreshRequest
+
 	if err := c.ShouldBindJSON(&req); err != nil {
 		_ = c.Error(err)
 		return

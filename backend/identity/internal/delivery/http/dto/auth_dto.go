@@ -6,8 +6,8 @@ import "github.com/go-ozzo/ozzo-validation/v4/is"
 // --------------------- Register ---------------------
 
 type RegisterRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string `json:"email" example:"omidesmaeeli4@gmail.com"`
+	Password string `json:"password" example:"123123"`
 }
 
 func (r RegisterRequest) Validate() error {
@@ -20,8 +20,8 @@ func (r RegisterRequest) Validate() error {
 // --------------------- Login ---------------------
 
 type LoginRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string `json:"email" example:"omidesmaeeli4@gmail.com"`
+	Password string `json:"password" example:"123123"`
 }
 
 func (r LoginRequest) Validate() error {

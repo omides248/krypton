@@ -1,0 +1,12 @@
+general:
+  app_env: "development"
+  http_port: ":8081"
+
+database:
+  postgresql:
+    uri: "postgres://omides248:123123@localhost:5432/wallet_db?sslmode=disable"
+  migration:
+    path: "file://internal/adapters/storage/postgresql/migrations"
+
+auth:
+  jwt_secret_key: "25731f98a3959cc09469b86ffcff0e35702fe43337dd18f80cf9eae2767876f3"
