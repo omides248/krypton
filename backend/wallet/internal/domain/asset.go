@@ -47,7 +47,8 @@ func NewAsset(symbol, name, network string, assetType AssetType, precision int) 
 		Name:      name,
 		Type:      assetType,
 		Precision: precision,
-		IsActive:  true,
+		IsActive:  false,
 		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}, nil
 }
