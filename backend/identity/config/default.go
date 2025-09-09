@@ -12,7 +12,7 @@ var (
 	DefaultMinIOSecretKey = "minioadmin123123"
 	DefaultMinIOPublicURL = "http://192.168.8.140:9000"
 
-	DefaultPostgresqlIdentityURI = "postgres://omides248:123123@127.0.0.1:5432/identity_db"
+	DefaultPostgresqlIdentityURI = "postgres://omides248:123123@127.0.0.1:5432/identity_db?sslmode=disable"
 
 	DefaultMigrationsPath = "file://internal/adapters/storage/postgresql/migration"
 

@@ -56,8 +56,8 @@ func runServer() error {
 
 	// --- Repositories ---
 	dbTimeout := 10 * time.Second
-	assetRepo, _ := postgresql.NewAssetRepository(pgConn, appLogger, dbTimeout)
-	accountRepo := postgresql.NewAccountRepository(pgConn, appLogger, dbTimeout)
+	assetRepo, _ := postgresql.NewAssetRepository(pgConn, dbTimeout, appLogger)
+	accountRepo := postgresql.NewAccountRepository(pgConn, dbTimeout, appLogger)
 
 	// --- Application Services ---
 	tokenManager := auth.NewTokenManager(cfg.Auth.JWTSecretKey)

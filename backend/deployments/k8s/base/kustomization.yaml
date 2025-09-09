@@ -1,4 +1,8 @@
 resources:
+  - nginx-ingress.yaml
+
   - identity-deployment.yaml
   - identity-service.yaml
-  - identity-ingress.yaml
+
+  - wallet-deployment.yaml
+  - wallet-service.yaml

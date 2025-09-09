@@ -5,4 +5,4 @@ patches:
   - path: replicas-patch.yaml
     target:
       kind: Deployment
-      name: catalog-deployment
+      name: identity-deployment

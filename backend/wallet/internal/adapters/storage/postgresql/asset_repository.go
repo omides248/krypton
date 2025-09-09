@@ -15,12 +15,7 @@ type assetRepo struct {
 	logger         *zap.Logger
 }
 
-func (r *assetRepo) FindUserAccounts(ctx context.Context, userID string) ([]domain.UserAccount, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func NewAssetRepository(conn *pgx.Conn, logger *zap.Logger, timeout time.Duration) (domain.AssetRepository, error) {
+func NewAssetRepository(conn *pgx.Conn, timeout time.Duration, logger *zap.Logger) (domain.AssetRepository, error) {
 	return &assetRepo{
 		conn:           conn,
 		defaultTimeout: timeout,
@@ -43,12 +38,12 @@ func (r *assetRepo) Save(ctx context.Context, asset *domain.Asset) error {
 	}(tx, ctx)
 
 	const assetQuery = `
-					INSERT INTO assets (symbol, asset_code, asset_type, precision, is_active, created_at, updated_at)
+					INSERT INTO assets (symbol, name, asset_type, precision, is_active, created_at, updated_at)
 					VALUES ($1, $2, $3, $4, $5, $6, $7)
 					RETURNING id
 	`
 	err = tx.QueryRow(ctx, assetQuery,
-		asset.Symbol, asset.Name, asset.Type, asset.Precision, asset.IsActive, asset.CreatedAt,
+		asset.Symbol, asset.Name, asset.Type, asset.Precision, asset.IsActive, asset.CreatedAt, asset.UpdatedAt,
 	).Scan(&asset.ID)
 	if err != nil {
 		r.logger.Error("failed to save asset", zap.Error(err))
@@ -73,6 +68,11 @@ func (r *assetRepo) Save(ctx context.Context, asset *domain.Asset) error {
 }
 
 func (r *assetRepo) FindAssetBySymbol(ctx context.Context, symbol string) (*domain.Asset, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (r *assetRepo) FindUserAccounts(ctx context.Context, userID string) ([]domain.UserAccount, error) {
 	//TODO implement me
 	panic("implement me")
 }

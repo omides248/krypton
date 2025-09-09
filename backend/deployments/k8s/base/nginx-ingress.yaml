@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: krypton-identity-ingress
+  namespace: default
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: identity.api.krypton.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: krypton-identity-service
+                port:
+                  number: 8080
+
+    - host: wallet.api.krypton.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: krypton-wallet-service
+                port:
+                  number: 8080
+

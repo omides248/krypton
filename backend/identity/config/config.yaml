@@ -7,7 +7,7 @@ general:
 
 database:
   postgresql:
-    uri: "postgres://omides248:123123@192.168.8.140:5432/identity_db"
+    uri: "postgres://omides248:123123@192.168.8.140:5432/identity_db?sslmode=disable"
   migration:
     path: "file://internal/adapters/storage/postgresql/migrations"
 

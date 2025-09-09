@@ -1,6 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: catalog-deployment
+  name: identity-deployment
 spec:
   replicas: 5

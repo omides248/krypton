@@ -25,6 +25,7 @@ type Asset struct {
 	IsActive          bool
 	SupportedNetworks []AssetNetwork
 	CreatedAt         time.Time
+	UpdatedAt         time.Time
 }
 
 type AssetNetwork struct {

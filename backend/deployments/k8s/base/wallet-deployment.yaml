@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: krypton-identity-deployment
+  name: krypton-wallet-deployment
   labels:
-    app: krypton-identity-deployment
+    app: krypton-wallet-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: krypton-identity-deployment
+      app: krypton-wallet-deployment
   template:
     metadata:
-      name: krypton-identity-deployment
+      name: krypton-wallet-deployment
       labels:
-        app: krypton-identity-deployment
+        app: krypton-wallet-deployment
     spec:
       restartPolicy: Always
       containers:
-        - name: krypton-identity-deployment
+        - name: krypton-wallet-deployment
           image: golang:1.24.5-alpine
-          workingDir: /go/src/identity
-          command: [ "sh", "-c", "go run main.go" ]
+          workingDir: /go/src/wallet
+#          command: [ "sh", "-c", "go run main.go" ]
           tty: true
           stdin: true
           imagePullPolicy: IfNotPresent
@@ -28,8 +28,8 @@ spec:
             - containerPort: 8080
               protocol: TCP
           volumeMounts:
-            - name: identity-code
-              mountPath: /go/src/identity
+            - name: wallet-code
+              mountPath: /go/src/wallet
             - name: pkg-code
               mountPath: /go/src/pkg
             - name: go-mod-cache
@@ -37,9 +37,9 @@ spec:
             - name: go-build-cache
               mountPath: /root/.cache/go-build
       volumes:
-        - name: identity-code
+        - name: wallet-code
           hostPath:
-            path: /home/omides248/krypton/backend/identity
+            path: /home/omides248/krypton/backend/wallet
             type: Directory
         - name: pkg-code
           hostPath:

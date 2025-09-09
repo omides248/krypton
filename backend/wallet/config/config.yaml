@@ -1,10 +1,10 @@
 general:
   app_env: "development"
-  http_port: ":8081"
+  http_port: ":8080"
 
 database:
   postgresql:
-    uri: "postgres://omides248:123123@localhost:5432/wallet_db?sslmode=disable"
+    uri: "postgres://omides248:123123@192.168.8.140:5432/wallet_db?sslmode=disable"
   migration:
     path: "file://internal/adapters/storage/postgresql/migrations"
 

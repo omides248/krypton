@@ -1,8 +1,10 @@
 package auth
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	"krypton/pkg/contextkeys"
 	"strings"
 
 	"time"
@@ -70,6 +72,7 @@ func (tm *TokenManager) Validate(tokenString string) (*Claims, error) {
 
 func (tm *TokenManager) AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
 			_ = c.Error(ErrInvalidAccessToken)
@@ -92,7 +95,11 @@ func (tm *TokenManager) AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
+		ctx := c.Request.Context()
+		newCtx := context.WithValue(ctx, contextkeys.UserIDKey, claims.UserID)
+		c.Request = c.Request.WithContext(newCtx)
 		c.Set("userID", claims.UserID)
+
 		c.Next()
 	}
 }

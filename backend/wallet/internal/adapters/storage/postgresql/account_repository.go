@@ -17,7 +17,7 @@ type accountRepo struct {
 	logger         *zap.Logger
 }
 
-func NewAccountRepository(conn *pgx.Conn, logger *zap.Logger, timeout time.Duration) domain.AccountRepository {
+func NewAccountRepository(conn *pgx.Conn, timeout time.Duration, logger *zap.Logger) domain.AccountRepository {
 	return &accountRepo{
 		conn:           conn,
 		defaultTimeout: timeout,
