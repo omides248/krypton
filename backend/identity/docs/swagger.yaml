@@ -1,0 +1,211 @@
+basePath: /v1
+definitions:
+  dto.ErrorResponse:
+    properties:
+      details: {}
+      error_type:
+        type: string
+      message:
+        type: string
+      status_code:
+        type: integer
+    type: object
+  dto.LoginRequest:
+    properties:
+      email:
+        example: omidesmaeeli4@gmail.com
+        type: string
+      password:
+        example: "123123"
+        type: string
+    type: object
+  dto.LoginResponse:
+    properties:
+      token:
+        $ref: '#/definitions/dto.Token'
+      user:
+        $ref: '#/definitions/dto.UserResponse'
+    type: object
+  dto.RefreshRequest:
+    properties:
+      refresh_token:
+        type: string
+    type: object
+  dto.RefreshResponse:
+    properties:
+      access_token:
+        type: string
+    type: object
+  dto.RegisterRequest:
+    properties:
+      email:
+        example: omidesmaeeli4@gmail.com
+        type: string
+      password:
+        example: "123123"
+        type: string
+    type: object
+  dto.Token:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  dto.UserResponse:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://swagger.io/support
+  description: This is the API for the Krypton Identity microservice.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Krypton Identity Service API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user and returns access and refresh tokens.
+      parameters:
+      - description: User login request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.LoginResponse'
+        "400":
+          description: Validation Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Invalid Credentials
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Log in a user
+      tags:
+      - Auth
+  /auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Generates a new access token using a valid refresh token.
+      parameters:
+      - description: Refresh token request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RefreshRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.RefreshResponse'
+        "400":
+          description: Validation Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "401":
+          description: Invalid Token
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Refresh access token
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user account with the provided email and password.
+      parameters:
+      - description: User registration request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.UserResponse'
+        "400":
+          description: Validation Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "409":
+          description: Email already exists
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Register a new user
+      tags:
+      - Auth
+  /users/me:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        Retrieves the profile information of the authenticated user.
+        Type "Bearer" followed by a space and JWT token.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get user profile
+      tags:
+      - Users
+securityDefinitions:
+  ApiKeyAuth:
+    description: '"Type ''Bearer'' followed by a space and JWT token."'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
